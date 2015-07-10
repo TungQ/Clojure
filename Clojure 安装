@@ -18,3 +18,13 @@ Java HotSpot(TM) Client VM (build 11.0-b15, mixed mode, sharing)
 目录结构如下：
 
 
+步骤四：通过REPL运行clojure
+关于REPL：REPL 是 read-eval-print loop的缩写。它能让你一行行的敲入代码并能看到运行结果。
+终于可以载入clojure程序了。既然clojure离不开java，所以你需要通过使用java命令来指定clojure文件来运行它。
+使用java运行clojure（注意路径和文件名的正确性）：
+>java -cp clojure.jar clojure.main
+Clojure 1.5.1
+user=>
+
+so easy ！现在你的命令行接口已经成功运行了一个clojure REPL。提示符现在变 成了”user=>"，你既可以敲入clojure表达式，也可以加载clojure程序了。
+
