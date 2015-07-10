@@ -1,0 +1,20 @@
+步骤一：使用命令行接口
+所有的操作系统都包含一个命令行接口。这种纯文字接口建立了人机交流的通讯入口，让你借此来管理系统应用和服务。我们将会使用这个接口来设置、安装、和运行clojure程序。
+在windos系统中，命令行接口就是为人所知的“命令行提示符”。
+
+步骤二：检查java
+clojure需要java才能运行。换句话说，clojure会被编译成java字节码，这些字节码最终会被依次编译成机器码并被操作系统执行。
+windows系统默认情况下并不会安装java。你可以用命令行接口检查检查。在命令行中，敲下“java -version" 来确认一下是否安装。
+如果正确安装，命令行会做出下面成功的回应：
+>java -version
+java version "1.6.0_10-rc2"
+Java(TM) SE Runtime Environment (build 1.6.0_10-rc2-b32)
+Java HotSpot(TM) Client VM (build 11.0-b15, mixed mode, sharing)
+
+在安装clojure之前，务必确保已经正确安装java。
+
+步骤三：安装clojure
+首先下载当前最新的稳定版本clojure,将其解压到指定的目录下。
+目录结构如下：
+
+
