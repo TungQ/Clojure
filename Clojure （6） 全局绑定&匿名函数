@@ -1,0 +1,76 @@
+绑定变量
+在Clojure中，我们可以使用 " def " 给函数和数据赋予一个名字。例如我们定义一个叫做“alphabet”的字符串变量
+user=> (def alphabet "abcdefghijklmnopqrstuvwxyz")
+#'user/alphabet
+user=> alphabet
+"abcdefghijklmnopqrstuvwxyz"
+
+使用变量的好处一个是方便使用，另一个在于一个有意义的名字大大增强代码的可读性。举个例子，如果我们想要知道一个字符串的包含的字符数量：
+user=> (count alphabet)
+26
+我们就不需要在每次去计算字符串数量的时候都要写下长长的一大串了。只用把与该字符串绑定的变量名传过去就行。使用变量绑定，我们不仅能使代码具有良好的可读性，有时候还能增加代码性能。
+增加性能？这个很好理解也很常用。
+例如我们经常把计算好的值绑定到一个变量上。这样我们在用到这个值的时候就不用每次都得重新计算了。对于一些费时的操作，这可能省下大量的时间。
+下面的例子就说明了这一点：
+user=> (def alphabet-length (count alphabet))
+#'user/alphabet-length
+user=> alphabet-length
+26
+如果我们要计算字符串长度的两倍，就可以直接使用绑定的字符串长度：
+user=> (+ alphabet-length alphabet-length)
+52
+使用def绑定类似其他语言中的赋值操作。
+
+
+绑定匿名函数
+首先我们看下面这个例子：
+user=> (def alphabet "abcdefghijklmnopqrstuvwxyz") ;;将aplhabet绑定到一个字符串
+#'user/alphabet
+user=> (def alphabet-length (count alphabet)) ;;将alphabet-length与长度绑定
+#'user/alphabet-length
+user=> alphabet-length ;;此时为26
+26
+user=> (def alphabet "abc") ;;重新绑定到新的字符串
+#'user/alphabet
+user=> alphabet-length ;;依然是26,没有变化
+26
+上面例子中，我们改变alphabet后，alphabet-length是没有变化的。当然对于上面例子来说，没有变化是正常的。
+但是我们如何能让alphabet的变化能体现在alphabet-length上呢？这就需要函数绑定了。
+我们可以使用关键字  " fn " 来定义一个匿名函数。
+user=> (fn[](count alphabet)) ;;这里定义了一个匿名函数
+#<user$eval5$fn__6 user$eval5$fn__6@3c9c31>
+user=> (def alphabet-length (fn[](count alphabet))) ;;这里定义了一个同样的匿名函数，不过绑定到了alphabet-length上
+#'user/alphabet-length
+
+上面有一个注意点，函数中使用的alphabet是我们之前已经绑定好的。
+使用def的绑定属于全局绑定，就是说对于其他函数是可见的。
+在clojure中，函数总会有一个返回值，那就是函数体的执行能到达的最后一个表达式。
+所以上面定义的匿名函数最终会返回alphabet的长度。
+我们将匿名函数绑定到了alphabet-length上，每次我们输入alphabet的时候，都会去执行这个匿名函数。
+所以我们只要去改变alphabet的值，因为这种改变时全局的，alphabet-length都会重新计算成新的字符串长度。
+看下面例子：
+user=> alphabet-length ;;不执行函数，返回函数字面量
+#<user$alphabet_length user$alphabet_length@933bcb>
+user=> (alphabet-length) ;;执行函数，返回函数执行结果
+3
+
+我们在使用绑定函数的时候要注意,此时alphabet-length是与函数绑定的，换句话说它代表的是一个函数。
+在clojure中，函数的调用必须要在S表达式中。如果直接使用函数名，会返回函数的字面量，并不会执行函数。
+我们再来看一下如何绑定需要传参的匿名函数。我们定义一个两个数字相加的匿名函数，并绑定到add上：
+user=> (def add (fn [a,b](+ a b))) ;; fn后的[]内放置参数列表，多个参数用逗号分隔
+#'user/add
+user=> (add 1 2)
+3
+
+绑定匿名函数的另一种形式
+clojure提供了一种比较简洁的方式让我们来对匿名函数进行绑定
+;; 将 (fn (count alphabet)) 替换成了#(count alphabet) ，省了几个括号
+user=> (def alphabet-length #(count alphabet))
+#'user/alphabet-length
+
+再看一下需要参数传递的例子（非常简洁）
+;;这里的参数直接使用%，如果只有一个参数只用 "%"即可。多个参数是 "%[参数序号]"
+user=> (def add #(+ %1 %2))
+#'user/add
+user=> (add 1 2)
+3
