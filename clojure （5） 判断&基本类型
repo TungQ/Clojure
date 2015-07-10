@@ -1,0 +1,115 @@
+判断语句
+
+在Clojure中，所有的语法规则最终都是S表达式。我们如何知道哪些是判断语句呢？这个很简单，clojure中（lisp习惯）有个规定：对于判断功能的函数，函数名后面都有一个“？”号。所以我们只要看到后面带问号的函数名，就知道这一定是一个判断语句。很简单吧！
+例如 "fn?"这个函数用于判断传入的参数是否是一个函数：
+user=> (fn? reduce)
+true
+user=> (fn? 42)
+false
+
+基本类型
+
+数字（Number）
+Clojure支持非常丰富的数字类型的数据。每一种数字类型都提供了不同的计算精度，当然也占用不同的内存空间。当我们选择不同的数据类型时，精度、内存消耗这些因素对计算的性能和准确度有着至关重要的影响。所以我们必须对不同的数据类型有着深入的了解。
+=>42
+42
+ 
+;;整形
+=>(class 42)
+java.lang.Integer
+ 
+;;判断是否是数字
+=>(number? 42)
+true
+ 
+;;判断是否是整形
+=>(integer? 42)
+true
+ 
+=>21.42
+21.42
+ 
+;;查看类型
+=>(class 21.42)
+java.lang.Double
+ 
+;;判断是否是数字
+=>(number? 21.42)
+true
+ 
+;;判断是否是整形
+=>(integer? 21.42)
+false
+
+整形和浮点型在其他语言中都是常见的数据类型。但是分数（ratios）这种就非常少见了。在Clojure中，你可以将二分之一写成1/2，当然也可以用0.5。
+user=> 1/2
+1/2
+user=> (class 1/2)
+clojure.lang.Ratio
+user=> (ratio? 1/2)
+true
+user=> (* 1/2 1.0)
+0.5
+使用ratios类型的好处：
+在进行数据计算时，特别是使用大量的除法时，我们可以使用分数形式。等到得到最终的结果后，我们在对分数求值。这样最大的减少精度损失。（一旦遇到无法整除的除法运算都很可能减少精度）。
+
+字符（Character）
+字符代表一个字母、一个数字、一个标点符号或者其他符号。在Clojure中，符号使用反斜杠“\”作为开始。
+user=> \C
+\C
+user=> (class \c)
+java.lang.Character
+user=> (char? \c)
+true
+
+字符串 （String）
+字符组成一起就是字符串。字符串使用双引号括起来（这招很通用）。
+user=> "some characters in a string"
+"some characters in a string"
+user=> (class "some characters in a string")
+java.lang.String
+user=> (string? "some characters in a string")
+true
+user=> (str \c)
+"c"
+
+符号（Symbol）
+符号被作为一种标示符。为了常用目的经常绑定到数据或者函数上。符号之前说过了，用单引号" ' "开头，或者使用quote函数。
+user=> 'stuff
+stuff
+user=> (quote stuff)
+stuff
+user=> (class 'stuff)
+clojure.lang.Symbol
+user=> (symbol? 'stuff)
+true
+符号也可通过字符串来创建：
+user=> (symbol "more stuff")
+more stuff
+user=> (class (symbol "more stuff"))
+clojure.lang.Symbol
+
+关键字（Keyword）
+
+关键字是另一种类型的符号，它不适用于数据绑定的。关键字主要用于匹配。例如在哈希表中作为key，它比使用字符串作为key检索起来要快的多。关键字以冒号”：“开头。
+user=> :stuff
+:stuff
+user=> (class :stuff)
+clojure.lang.Keyword
+关键字也可以通过字符串来创建：
+user=> (keyword "stuff")
+:stuff
+user=> (class (keyword "stuff"))
+clojure.lang.Keyword
+
+布尔值（Boolean）
+这个太直观了。就俩值：true 和 false
+user=> true
+true
+user=> false
+false
+user=> (class true)
+java.lang.Boolean
+user=> (class false)
+java.lang.Boolean
+
